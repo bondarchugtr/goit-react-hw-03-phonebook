@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import s from './InputPhonebook.module.css';
-import { nanoid } from 'nanoid';
-import Contacts from '../PhoneContacts/PhoneContacts';
+import React, { Component } from "react";
+import s from "./InputPhonebook.module.css";
+import { nanoid } from "nanoid";
+import Contacts from "../PhoneContacts/PhoneContacts";
 
 class Form extends Component {
   state = {
-    name: '',
-    number: '',
+    name: "",
+    number: "",
   };
 
   handleInputChange = ({ target }) => {
@@ -16,7 +16,7 @@ class Form extends Component {
     });
   };
 
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
     this.props.onSubmit(this.state);
     this.onContactsItem();
@@ -30,7 +30,7 @@ class Form extends Component {
   };
 
   reset = () => {
-    this.setState({ name: '', number: '' });
+    this.setState({ name: "", number: "" });
   };
 
   render() {

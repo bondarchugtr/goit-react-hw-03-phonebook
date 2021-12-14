@@ -1,18 +1,35 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 // import s from '../InputPhoneBook/InputPhonebook.module.css';
-import Form from '../Forma/FormPhonebook';
-import ContactsList from '../PhoneContacts/PhoneContacts';
-import Filter from '../Filter/Filter';
-import s from './PhoneBook.module.css';
-import { nanoid } from 'nanoid';
+import Form from "../Forma/FormPhonebook";
+import ContactsList from "../PhoneContacts/PhoneContacts";
+import Filter from "../Filter/Filter";
+import s from "./PhoneBook.module.css";
+import { nanoid } from "nanoid";
 
 class PhoneBook extends Component {
   state = {
     contacts: [],
-    filter: '',
+    filter: "",
   };
 
-  onSubmit = data => {
+  componentDidMount = () => {
+    const contact = localStorage.getItem("contacts");
+    const localStorageLoading = JSON.parse(contact);
+    if (localStorageLoading) {
+      this.setState({ contacts: localStorageLoading });
+    }
+  };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps) {
+      window.localStorage.setItem(
+        "contacts",
+        JSON.stringify(this.state.contacts)
+      );
+    }
+  }
+
+  onSubmit = (data) => {
     const contact = {
       id: nanoid(),
       name: data.name,
@@ -22,30 +39,33 @@ class PhoneBook extends Component {
       return alert(`Name ${contact.name}already on your list
       `);
     } else {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         contacts: [...prevState.contacts, { ...contact }],
       }));
     }
   };
 
-  availabilityContact = value => {
-    return this.state.contacts.find(el => el.name === value);
+  availabilityContact = (value) => {
+    return this.state.contacts.find((el) => el.name === value);
   };
 
-  delContact = contactId => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+  delContact = (contactId) => {
+    this.setState((prevState) => ({
+      contacts: prevState.contacts.filter(
+        (contact) => contact.id !== contactId
+      ),
     }));
+    window.localStorage.removeItem("contacts");
   };
-  filterContact = e => {
+  filterContact = (e) => {
     this.setState({ filter: e.target.value });
   };
 
   render() {
     const { contacts, filter } = this.state;
     const normalizedFilter = filter.toLowerCase();
-    const visibleContacts = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter),
+    const visibleContacts = contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(normalizedFilter)
     );
     return (
       <>
